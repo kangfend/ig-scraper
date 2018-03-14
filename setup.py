@@ -11,7 +11,7 @@ setup(
     url='https://github.com/kangfend/ig-scraper',
     download_url='https://github.com/kangfend/ig-scraper/tarball/0.0.1',
     keywords=['Instagram', 'Scraper'],
-    install_requires=['requests==2.18.4'],
+    install_requires=['requests>=2.13.0'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
