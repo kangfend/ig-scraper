@@ -11,7 +11,7 @@ class IGScraper:
     def scrape_hashtag(self, end_cursor='', maximum=10):
         try:
             session = requests.Session()
-            session.session.headers = {'user-agent': CHROME_WIN_UA}
+            session.headers = {'user-agent': CHROME_WIN_UA}
             session.cookies.set('ig_pr', '1')
             response = session.get(QUERY_HASHTAG.format(
                 self.hashtag, end_cursor)).json()
