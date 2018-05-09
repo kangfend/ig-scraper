@@ -30,10 +30,16 @@ class IGScraper:
                     caption = node['edge_media_to_caption']['edges'][0]['node']['text']
                 else:
                     caption = None
+                if node['is_video']:
+                    r = requests.get(MEDIA_URL.format(node['shortcode'])).json()
+                    display_url = r['graphql']['shortcode_media']['video_url']
+                else:
+                    display_url = node['display_url']
                 item = {
                     'is_video': node['is_video'],
                     'caption': caption,
-                    'display_url': node['display_url'],
+                    'display_url': display_url,
+                    'thumbnail_src': node['thumbnail_src'],
                     'owner_id': node['owner']['id'],
                     'id': node['id'],
                     'shortcode': node['shortcode'],
