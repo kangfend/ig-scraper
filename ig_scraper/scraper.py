@@ -31,7 +31,7 @@ class IGScraper:
                 else:
                     caption = None
 
-                if profile_picture or node['is_video']:
+                if any([profile_picture, node['is_video']]):
                     r = requests.get(MEDIA_URL.format(node['shortcode'])).json()
 
                 if node['is_video']:
@@ -51,8 +51,9 @@ class IGScraper:
                 }
 
                 if profile_picture:
-                    profile_picture = r['graphql']['shortcode_media']['owner']['profile_pic_url']
-                    item['profile_picture'] = profile_picture
+                    owner = r['graphql']['shortcode_media']['owner']
+                    item['profile_picture'] = owner['profile_pic_url']
+                    item['username'] = owner['username']
 
                 if item not in self.items and len(self.items) < maximum:
                     self.items.append(item)
