@@ -58,6 +58,6 @@ class IGScraper:
                     self.items.append(item)
             end_cursor = data['edge_hashtag_to_media']['page_info']['end_cursor']
             if end_cursor and len(self.items) < maximum:
-                self.scrape_hashtag(end_cursor=end_cursor,
+                self.scrape_hashtag(end_cursor=end_cursor, profile_picture=profile_picture,
                                     maximum=maximum, initial=False)
         return self.items
