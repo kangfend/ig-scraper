@@ -8,7 +8,7 @@ class IGScraper:
         self.hashtag = hashtag
         self.items = []
 
-    def scrape_hashtag(self, end_cursor='', maximum=10, first=10, initial=True):
+    def scrape_hashtag(self, end_cursor='', maximum=10, first=10, initial=True, profile_picture=False):
         if initial:
             self.items = []
 
@@ -30,11 +30,15 @@ class IGScraper:
                     caption = node['edge_media_to_caption']['edges'][0]['node']['text']
                 else:
                     caption = None
-                if node['is_video']:
+
+                if profile_picture or node['is_video']:
                     r = requests.get(MEDIA_URL.format(node['shortcode'])).json()
+
+                if node['is_video']:
                     display_url = r['graphql']['shortcode_media']['video_url']
                 else:
                     display_url = node['display_url']
+
                 item = {
                     'is_video': node['is_video'],
                     'caption': caption,
@@ -45,6 +49,11 @@ class IGScraper:
                     'shortcode': node['shortcode'],
                     'taken_at_timestamp': node['taken_at_timestamp']
                 }
+
+                if profile_picture:
+                    profile_picture = r['graphql']['shortcode_media']['owner']['profile_pic_url']
+                    item['profile_picture'] = profile_picture
+
                 if item not in self.items and len(self.items) < maximum:
                     self.items.append(item)
             end_cursor = data['edge_hashtag_to_media']['page_info']['end_cursor']
