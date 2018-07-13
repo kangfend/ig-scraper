@@ -17,7 +17,7 @@ class IGScraper:
             session = requests.Session()
             session.headers = {'user-agent': CHROME_WIN_UA}
             session.cookies.set('ig_pr', '1')
-            session.cookies.set('sessionid', 'IGSCde74258b98845d67bb0d4cccba829df0ca1bdae1f9a3ad4d5457704bffe62176%3AMGpk5l6GXPOrpF4vAITBbbI3VMwdq3jX%3A%7B%22_auth_user_id%22%3A45833965%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22_token%22%3A%2245833965%3A8eLFOQP8HIfM17nJvhzqiZljuqQqf7AV%3A746feca19f254ad8326ac0fc3514c4b8ea223c34d7a3fa23db8c924572bd7aa5%22%2C%22_platform%22%3A4%2C%22_remote_ip%22%3A%22103.79.152.6%22%2C%22_mid%22%3A%22WQmivQAEAAFn3JtMngfIjptMWBY4%22%2C%22_user_agent_md5%22%3A%2297de1fddac67554e2eb90d9a46b3dcd4%22%2C%22_token_ver%22%3A2%2C%22last_refreshed%22%3A1523346195.6181542873%7D')  # noqa
+            session.cookies.set('sessionid', 'IGSC9c1a9b31465fc4bbae69f03c3eddbdefc78e9d0a09204bc1f945f067871ba057:0RgVJpkNelIIaZ5iOscoV6481YCCSpso:{"_auth_user_id":3178923994,"_auth_user_backend":"accounts.backends.CaseInsensitiveModelBackend","_auth_user_hash":"","_platform":4,"_token_ver":2,"_token":"3178923994:v3NDtXsBlIbqliJXOvDLRhk82rpxrt8Q:9600fe4f7349fe9fa5f60719354dd2c52cca412aaa8196a9a99cf6b7a4ff2570","last_refreshed":1531477132.9980008602}')  # noqa
             response = session.get(QUERY_HASHTAG.format(
                 self.hashtag, first, end_cursor)).json()
             data = response['data']['hashtag']
