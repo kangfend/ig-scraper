@@ -1,5 +1,8 @@
 from setuptools import setup
-from ig_scraper import __version__
+
+
+__author__ = 'Sutrisno Efendi <kangfend@gmail.com>'
+__version__ = '0.0.7'
 
 
 setup(
@@ -13,7 +16,7 @@ setup(
     url='https://github.com/kangfend/ig-scraper',
     download_url='https://github.com/kangfend/ig-scraper/tarball/' + __version__,
     keywords=['Instagram', 'Scraper'],
-    install_requires=['requests>=2.13.0'],
+    install_requires=['requests'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

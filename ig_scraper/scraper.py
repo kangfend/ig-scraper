@@ -1,6 +1,6 @@
 import requests
 
-from constants import *  # noqa
+from .constants import *  # noqa
 
 
 class IGScraper:
