@@ -5,6 +5,6 @@ IG Scraper
 from ig_scraper import IGScraper
 
 
-scraper = IGScraper('#YourHashtag')
-scraper.scrape_hashtag(maximum=100)
+scraper = IGScraper()
+scraper.scrape_hashtag('YourHashtag', maximum=100)
 ```
