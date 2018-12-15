@@ -1,27 +1,60 @@
+import hashlib
+import json
 import requests
+import sys
 
 from .constants import *  # noqa
 
 
 class IGScraper:
-    def __init__(self, hashtag):
-        self.hashtag = hashtag
+    def __init__(self):
         self.items = []
 
-    def scrape_hashtag(self, end_cursor='', maximum=10, first=10, initial=True,
+        self.session = requests.Session()
+        self.session.headers = {'user-agent': CHROME_WIN_UA}
+        self.session.cookies.set('ig_pr', '1')
+        self.rhx_gis = None
+
+    def get_shared_data(self, username=''):
+        """Fetches the user's metadata."""
+        response = self.session.get(BASE_URL + username)
+        content = str(response.content)
+        if '_sharedData' in content:
+            try:
+                shared_data = content.split("window._sharedData = ")[
+                    1].split(";</script>")[0]
+                return json.loads(shared_data)
+            except (TypeError, KeyError, IndexError):
+                pass
+
+    def get_ig_gis(self, rhx_gis, params):
+        data = rhx_gis + ":" + params
+        if sys.version_info.major >= 3:
+            return hashlib.md5(data.encode('utf-8')).hexdigest()
+        else:
+            return hashlib.md5(data).hexdigest()
+
+    def update_ig_gis_header(self, params):
+        self.rhx_gis = self.get_shared_data()['rhx_gis']
+        self.session.headers.update({
+            'x-instagram-gis': self.get_ig_gis(
+                self.rhx_gis,
+                params
+            )
+        })
+
+    def scrape_hashtag(self, hashtag, end_cursor='', maximum=10, first=10, initial=True,
                        detail=False):
         if initial:
             self.items = []
 
         try:
-            session = requests.Session()
-            session.headers = {'user-agent': CHROME_WIN_UA}
-            session.cookies.set('ig_pr', '1')
-            session.cookies.set('sessionid', 'IGSC9c1a9b31465fc4bbae69f03c3eddbdefc78e9d0a09204bc1f945f067871ba057:0RgVJpkNelIIaZ5iOscoV6481YCCSpso:{"_auth_user_id":3178923994,"_auth_user_backend":"accounts.backends.CaseInsensitiveModelBackend","_auth_user_hash":"","_platform":4,"_token_ver":2,"_token":"3178923994:v3NDtXsBlIbqliJXOvDLRhk82rpxrt8Q:9600fe4f7349fe9fa5f60719354dd2c52cca412aaa8196a9a99cf6b7a4ff2570","last_refreshed":1531477132.9980008602}')  # noqa
-            response = session.get(QUERY_HASHTAG.format(
-                self.hashtag, first, end_cursor)).json()
+            params = QUERY_HASHTAG_VARS.format(hashtag, end_cursor)
+            self.update_ig_gis_header(params)
+            response = self.session.get(QUERY_HASHTAG.format(params))
+            response = response.json()
             data = response['data']['hashtag']
-        except:
+        except Exception:
             data = []
 
         if data:
@@ -33,7 +66,11 @@ class IGScraper:
                     caption = None
 
                 if any([detail, node['is_video']]):
-                    r = requests.get(MEDIA_URL.format(node['shortcode'])).json()
+                    try:
+                        r = requests.get(MEDIA_URL.format(
+                            node['shortcode'])).json()
+                    except Exception:
+                        continue
 
                 if node['is_video']:
                     display_url = r['graphql']['shortcode_media']['video_url']
