@@ -96,4 +96,5 @@ class IGScraper:
             if end_cursor and len(self.items) < maximum:
                 self.scrape_hashtag(hashtag, detail=detail, initial=False,
                                     end_cursor=end_cursor, maximum=maximum)
+        self.session.close()
         return self.items
