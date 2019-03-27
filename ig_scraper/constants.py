@@ -7,4 +7,5 @@ QUERY_HASHTAG = BASE_URL + \
 QUERY_HASHTAG_VARS = '{{"tag_name":"{0}","first":50,"after":"{1}"}}'
 
 # User agent
-CHROME_WIN_UA = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+CHROME_WIN_UA = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 ' \
+                '(KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'

@@ -57,7 +57,8 @@ class IGScraper:
                 node = item['node']
                 caption = None
                 if node['edge_media_to_caption']['edges']:
-                    caption = node['edge_media_to_caption']['edges'][0]['node']['text']
+                    caption = node[
+                        'edge_media_to_caption']['edges'][0]['node']['text']
 
                 if any([detail, node['is_video']]):
                     try:
@@ -90,7 +91,8 @@ class IGScraper:
                 if item not in self.items and len(self.items) < maximum:
                     self.items.append(item)
 
-            end_cursor = data['edge_hashtag_to_media']['page_info']['end_cursor']  # noqa
+            end_cursor = data[
+                'edge_hashtag_to_media']['page_info']['end_cursor']
             if end_cursor and len(self.items) < maximum:
                 self.scrape_hashtag(hashtag, detail=detail, initial=False,
                                     end_cursor=end_cursor, maximum=maximum)

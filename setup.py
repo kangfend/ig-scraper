@@ -14,7 +14,7 @@ setup(
     author='Sutrisno Efendi',
     author_email='kangfend@gmail.com',
     url='https://github.com/kangfend/ig-scraper',
-    download_url='https://github.com/kangfend/ig-scraper/tarball/' + __version__,
+    download_url='https://github.com/kangfend/ig-scraper/tarball/' + __version__,  # noqa
     keywords=['Instagram', 'Scraper'],
     install_requires=['requests'],
     classifiers=[
