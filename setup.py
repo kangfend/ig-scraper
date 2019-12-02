@@ -1,8 +1,8 @@
 from setuptools import setup
+from ig_scraper import __version__
 
 
 __author__ = 'Sutrisno Efendi <kangfend@gmail.com>'
-__version__ = '0.0.9'
 
 
 setup(

@@ -15,42 +15,18 @@ class IGScraper:
         self.session.cookies.set('ig_pr', '1')
         self.rhx_gis = None
 
-    def get_shared_data(self, username=''):
-        """Fetches the user's metadata."""
-        response = self.session.get(BASE_URL + username)
-        content = str(response.content)
-        if '_sharedData' in content:
-            try:
-                shared_data = content.split("window._sharedData = ")[
-                    1].split(";</script>")[0]
-                return json.loads(shared_data)
-            except (TypeError, KeyError, IndexError):
-                pass
-
-    def get_ig_gis(self, rhx_gis, params):
-        data = rhx_gis + ":" + params
-        if sys.version_info.major >= 3:
-            return hashlib.md5(data.encode('utf-8')).hexdigest()
-        return hashlib.md5(data).hexdigest()
-
-    def update_ig_gis_header(self, params):
-        self.rhx_gis = self.get_shared_data()['rhx_gis']
-        self.session.headers.update({
-            'x-instagram-gis': self.get_ig_gis(self.rhx_gis, params)
-        })
-
     def scrape_hashtag(self, hashtag, end_cursor='', maximum=10, first=10,
                        initial=True, detail=False):
         if initial:
             self.items = []
 
         try:
-            params = QUERY_HASHTAG_VARS.format(hashtag, end_cursor)
-            self.update_ig_gis_header(params)
+            params = QUERY_HASHTAG_VARS.format(hashtag, 10, end_cursor)
             response = self.session.get(QUERY_HASHTAG.format(params)).json()
             data = response['data']['hashtag']
         except Exception:
-            data = []
+            self.session.close()
+            return []
 
         if data:
             for item in data['edge_hashtag_to_media']['edges']:
